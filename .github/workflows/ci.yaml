@@ -8,8 +8,8 @@ on:
        - main
 jobs:
   build:
-  runs-on: ubuntu-latest
-  steps:
+    runs-on: ubuntu-latest
+    steps:
      - name: Checkout Code
        uses: actions/checkout@v3
       
@@ -23,7 +23,7 @@ jobs:
          aws-secret-access-key: $${{ secrets.AWS_SECRET_ACCESS_KEY }}      
          aws-region: us-east-1
 
-      - name: Upload zip to S3
+     - name: Upload zip to S3
         run: |
           aws s3 cp my-project.zip s3://my-new-s3practicebucket/phpBB.zip
         env:
@@ -34,11 +34,11 @@ jobs:
          needs: upload-to-s3 # Ensures this job runs after the upload is complete
          runs-on: ubuntu-latest
          steps:
-           - name: Install SSH key
+     - name: Install SSH key
              uses: webfactory/ssh-agent@v0.8.0
              with:
                 ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
-        - name: Download from S3 and deploy to EC2
+     - name: Download from S3 and deploy to EC2
           run: |
             ssh -o StrictHostKeyChecking=no ec2-user@your-ec2-ip-address << 'EOF'
               sudo apt-get update
@@ -51,7 +51,7 @@ jobs:
               rm /tmp/phpBB.zip
              EOF
      
-           env:
+         env:
           # Pass AWS credentials to the SSH session
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
