@@ -1,14 +1,58 @@
 name: CI/CD Pipeline
 on:
-push:
-branches:
-- main
-pull_request:
-branches:
-- main
+  push:
+    branches:
+       - main
+  pull_request:
+    branches:
+       - main
 jobs:
-build:
-runs-on: ubuntu-latest
-steps:
-- name: Checkout Code
-uses: actions/checkout@v3
+  build:
+  runs-on: ubuntu-latest
+  
+  
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+      
+      - name: zip folder
+        run: zip -r phpBB.zip .
+    
+      - name: configure AWS credntials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+           AWS_ACCESS_KEY_ID: $${{ secrets.AWS_ACCESS_KEY_ID }} 
+           AWS_SECRET_ACCESS_KEY: $${{ secrets.AWS_SECRET_ACCESS_KEY }}      
+      
+      - name: Upload zip to S3
+        run: |
+          aws s3 cp my-project.zip s3://my-new-s3practicebucket/phpBB.zip
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+         
+      download-from-s3-to-ec2:
+         needs: upload-to-s3 # Ensures this job runs after the upload is complete
+         runs-on: ubuntu-latest
+         steps:
+           - name: Install SSH key
+             uses: webfactory/ssh-agent@v0.8.0
+             with:
+                ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
+        - name: Download from S3 and deploy to EC2
+          run: |
+            ssh -o StrictHostKeyChecking=no ec2-user@your-ec2-ip-address << 'EOF'
+              sudo apt-get update
+              sudo apt-get install -y awscli
+        
+              aws s3 cp s3://my-new-s3practicebucket/phpBB.zip /tmp/phpBB.zip
+
+              unzip /tmp/phpBB.zip -d /var/www/html
+
+              rm /tmp/phpBB.zip
+             EOF
+     
+           env:
+          # Pass AWS credentials to the SSH session
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
