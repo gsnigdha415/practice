@@ -10,23 +10,23 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-     - name: Checkout Code
-       uses: actions/checkout@v3
+      - name: Checkout Code
+        uses: actions/checkout@v3
       
-     - name: zip folder
-       run: zip -r phpBB.zip .
+      - name: zip folder
+        run: zip -r phpBB.zip .
     
-     - name: configure AWS credntials
-       uses: aws-actions/configure-aws-credentials@v4
-       with:
-         aws-access-key-id: $${{ secrets.AWS_ACCESS_KEY_ID }} 
-         aws-secret-access-key: $${{ secrets.AWS_SECRET_ACCESS_KEY }}      
-         aws-region: us-east-1
+      - name: configure AWS credntials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: $${{ secrets.AWS_ACCESS_KEY_ID }} 
+          aws-secret-access-key: $${{ secrets.AWS_SECRET_ACCESS_KEY }}      
+          aws-region: us-east-1
 
-     - name: Upload zip to S3
-       run: |
+      - name: Upload zip to S3
+        run: |
           aws s3 cp my-project.zip s3://my-new-s3practicebucket/phpBB.zip
-       env:
+        env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
          
