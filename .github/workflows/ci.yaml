@@ -36,7 +36,7 @@ download-from-s3-to-ec2:
         ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
     - name: Download from S3 and deploy to EC2
       run: |
-        ssh -o StrictHostKeyChecking=no ec2-user@your-ec2-ip-address << >
+        ssh -o StrictHostKeyChecking=no ec2-user@3.234.224.109 << 'EOF'
           sudo apt-get update
           sudo apt-get install -y awscli
 
