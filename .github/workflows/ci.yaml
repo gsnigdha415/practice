@@ -38,7 +38,6 @@ jobs:
           
           aws s3 cp s3://my-new-s3practicebucket/phpBB.zip /tmp/phpBB.zip
           sudo cp /tmp/phpBB.zip /var/www/html 
-          sudo unzip /var/www/html/phpBB.zip 
-          
-          
+          sudo unzip -o /tmp/phpBB.zip -d /var/www/html
+  
           EOF
