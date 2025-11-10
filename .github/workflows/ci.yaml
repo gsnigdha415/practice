@@ -35,10 +35,6 @@ jobs:
       - name: Download from S3 and deploy to EC2
         run: |
           ssh -o StrictHostKeyChecking=no ubuntu@184.72.131.35 << 'EOF'
-
-          aws s3 cp s3://my-new-s3practicebucket/phpBB.zip /tmp/phpBB.zip
-
           unzip /tmp/phpBB.zip -d /var/www/html
-        
-          rm /tmp/phpBB.zip
+          aws s3 cp s3://my-new-s3practicebucket/phpBB.zip /tmp/phpBB.zip
           EOF
