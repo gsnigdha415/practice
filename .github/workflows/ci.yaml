@@ -34,9 +34,8 @@ jobs:
           ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
       - name: Download from S3 and deploy to EC2
         run: |
-          ssh -o StrictHostKeyChecking=no ec2-user@3.234.224.109 << 'EOF'
-           sudo apt-get update
-           sudo apt-get install -y awscli
+          ssh -o StrictHostKeyChecking=no ec2-user@184.72.131.35 << 'EOF'
+         
 
            aws s3 cp s3://my-new-s3practicebucket/phpBB.zip /tmp/phpBB.zip
 
