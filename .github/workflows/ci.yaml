@@ -17,12 +17,12 @@ jobs:
       - name: configure AWS credntials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: $${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: $${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
       - name: Upload zip to S3
         run: |
-          aws s3 cp my-project.zip s3://my-new-s3practicebucket/phpBB.zip
+          aws s3 cp phpBB.zip s3://my-new-s3practicebucket/phpBB.zip
 
   download-from-s3-to-ec2:
     needs: build
@@ -35,11 +35,10 @@ jobs:
       - name: Download from S3 and deploy to EC2
         run: |
           ssh -o StrictHostKeyChecking=no ec2-user@184.72.131.35 << 'EOF'
-         
 
-           aws s3 cp s3://my-new-s3practicebucket/phpBB.zip /tmp/phpBB.zip
+          aws s3 cp s3://my-new-s3practicebucket/phpBB.zip /tmp/phpBB.zip
 
-           unzip /tmp/phpBB.zip -d /var/www/html
-
-           rm /tmp/phpBB.zip
+          unzip /tmp/phpBB.zip -d /var/www/html
+        
+          rm /tmp/phpBB.zip
           EOF
