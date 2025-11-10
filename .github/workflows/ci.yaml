@@ -37,7 +37,8 @@ jobs:
           ssh -o StrictHostKeyChecking=no ubuntu@184.72.131.35 << 'EOF'
           
           aws s3 cp s3://my-new-s3practicebucket/phpBB.zip /tmp/phpBB.zip
-          unzip /tmp/phpBB.zip 
-          sudo cp -r /tmp/phpBB /var/www/html
+          sudo cp /tmp/phpBB.zip /var/www/html
+          sudo unzip /var/www/html/phpBB.zip 
+          
           
           EOF
