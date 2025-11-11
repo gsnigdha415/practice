@@ -19,8 +19,7 @@ jobs:
       - name: Build Docker image
         run: docker build -t snigdha415/myapp:latest .
 
-     #Push Docker image to Docker Hub
-       - name: Log in to Docker Hub
+      - name: Log in to Docker Hub
          run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
-       - name: Push image
+      - name: Push image
          run: docker push snigdha415/myapp:latest
